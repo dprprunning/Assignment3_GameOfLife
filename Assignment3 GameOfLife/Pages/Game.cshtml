@@ -12,6 +12,7 @@
     //assuming that the board is square, we only define one size
     var gameboard = '';
     var gameboardsize = 10;
+    var socket;
 
     //game colors
     var gbcolor = "#D5E8E7";
@@ -54,5 +55,36 @@
         }
         
     }
-</script>
 
+    function connect() {
+        socket = new WebSocket("ws://" + window.location.host + "/GOLsocket");
+        socket.onopen = function (event) {
+            console.log("Socket Connected.");
+        }
+        socket.onclose = function (event) {
+            console.log("Socket Disconnected.");
+        }
+        socket.onmessage = function (event) {
+            console.log(event.data);
+            if (event.data === "") {
+
+
+            }
+
+        }
+        socket.onerror = function (event) {
+            console.log("Error: " + event.data);
+
+        }
+    }
+
+    function send(message) {
+        socket.send(message);
+    }
+
+    connect();
+    window.setTimeout(function () {
+        send("hello");
+    }, 3000);
+
+</script>
