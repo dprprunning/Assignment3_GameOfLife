@@ -3,6 +3,9 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="C:\Users\user\Desktop\CSSpring18\CS3750\Game.cshtml" Link="Game.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
   <ItemGroup>
