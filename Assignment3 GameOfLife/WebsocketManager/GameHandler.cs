@@ -8,5 +8,10 @@ namespace Assignment3_GameOfLife.WebsocketManager
 {
     public class GameHandler : WebSocketHandler
     {
+        public GameHandler(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
+        {
+
+        }
+
     }
 }
