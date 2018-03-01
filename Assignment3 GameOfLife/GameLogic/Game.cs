@@ -12,6 +12,8 @@ namespace Assignment3_GameOfLife.GameLogic
         public bool[,,] f = new bool[1, 10, 10];
         // Array f is the game board.
         public int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
+        private int[,] queue = new int[10000, 2];
+        private int head = 0, tail = 0, headMark;
 
         /// <summary>
         /// Initialize.
@@ -75,8 +77,13 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
+            headMark = head;
+            while (head != tail)
+            {
+
+            }
+            Thread.Sleep(500);
             currentState = 1 - currentState;
-            Thread.Sleep(1000);
             //return f[currentState];
         }
 
@@ -94,6 +101,26 @@ namespace Assignment3_GameOfLife.GameLogic
             // Make sure that the coordinates are valid.
         }
 
+        public string SendString()
+        {
+            string s = "";
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (f[currentState, i, j])
+                    {
+                        if (s != "")
+                        {
+                            s += ",";
+                        }
+                        s += (i * 10 + j).ToString();
+                    }
+                }
+            }
+            return s;
+        }
+
         public void ReceiveString(string s)
         {
             string[] ids = s.Split(",");
@@ -105,11 +132,14 @@ namespace Assignment3_GameOfLife.GameLogic
                     int t = Int32.Parse(ss);
                     int y = t % 10;
                     int x = t / 10;
-
+                    tail = (tail + 1) % 10000;
+                    queue[tail, 0] = x;
+                    queue[tail, 1] = y;
+                    //Add the coordinates to queue.
                 }
                 catch (Exception e)
                 {
-
+                    //Ignore bad numbers.
                 }
             }
         }
