@@ -5,6 +5,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Assignment3_GameOfLife.WebSocketManager;
+using Assignment3_GameOfLife.GameLogic;
 
 namespace Assignment3_GameOfLife
 {
@@ -30,16 +31,9 @@ namespace Assignment3_GameOfLife
 
         public override async Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
-            //await SendMessageToAllAsync("hello joe");
-            try
-            {
-                var message = System.Text.Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-            }
-            catch
-            {
-
-            }
+            var message = System.Text.Encoding.UTF8.GetString(buffer, 0, result.Count);
+            //GameLogic.
         }
 
     }
