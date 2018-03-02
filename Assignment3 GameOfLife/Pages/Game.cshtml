@@ -6,19 +6,24 @@
 <h1>Conway's Game of Life</h1>
 @*How to present the game board?*@
 <p></p>
-
+<div id="gameboarddiv"></div>
 <!-- Javascript code for creating table to be displayed as game board-->
 <script>
-    //assuming that the board is square, we only define one size
+    //gameboard vals for state of the board
     var gameboard = '';
     var gameboardsize = 10;
+    var clickedVals = [];
+    var gamestart = false;
+    var gamebool;
+    var stringVals = '';
     var socket;
 
     //game colors
     var gbcolor = "#D5E8E7";
     var gbcolorchange = "#CED741";
-
-    //use loop to create table based on size defined earlier
+    
+	//use loop to create table based on size defined earlier
+	//gameboard += '<div id="gameboarddiv">'
     for (var rows = 0; rows < gameboardsize; rows++) {
 
         gameboard += '<tr>';
@@ -26,41 +31,141 @@
         //example - first row will be 00 01 02, and row two will be 10 11 12 etc.
         for (var cols = 0; cols < gameboardsize; cols++) {
             gameboard += '<td bgcolor=' + gbcolor + ' onclick="clickedCell(id)"'
-                + 'width = 20 height= 20 id= ' + rows + '' + cols + '></td > ';
+                + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
 
         }
         gameboard += '</tr>';
-    }
-
+	}
+    //gameboard += '</div>';
     //display gameboard on page
-    document.write('<table border=1 align=center>' + gameboard + '</table>');
-
+    //document.write('<table id="gametable" border=1 align=center>' + gameboard + '</table>');
+    document.getElementById("gameboarddiv").innerHTML =
+        '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
+    gameboard = '';
     //define a function for a clicked cell event
     //should be able to toggle in-case user wishes to deselect cell
-    //doesnt have click and drag functionality
     function clickedCell(id) {
 
         var tempid = id;
-
+        var index = 0;
         var tempcolor = document.getElementById(tempid).getAttribute("bgcolor");
+        var gametable = document.getElementById("gameboarddiv");
 
         //if color is original color change it, else change it back to original color
+        //if cell is changed/ is an active cell, push the value to the array
+        //if cell is changed back, strip the value from the array
         if (tempcolor == gbcolor) {
             document.getElementById(id).style.backgroundColor = gbcolorchange;
             document.getElementById(id).setAttribute("bgcolor", gbcolorchange);
-        }
-        else if (tempcolor == gbcolorchange) {
+
+			clickedVals.push(tempid); 
+
+        }//only allow them to toggle if game is in stop mode
+        else if (tempcolor == gbcolorchange && gamestart == false) {
             document.getElementById(id).style.backgroundColor = gbcolor;
             document.getElementById(id).setAttribute("bgcolor", gbcolor);
+
+            index = clickedVals.indexOf(tempid);
+            clickedVals.splice(index, 1); //take away item from array if toggled
         }
-        
+
+        //If game is in play mode, then send those values to
+        //server side and clear out array
+        if (gamestart == true) {
+            sendVals();
+        }
     }
+
+    //send most recent values to backend
+    function sendVals() {
+        if (clickedVals.length > 0) {
+            stringVals = clickedVals.toString();
+            send(stringVals);
+            clickedVals = [];
+        }
+    }
+
+    //Game start and stop func
+	function start() {
+        gamestart = true;
+        send(true);
+        sendVals();
+        gameInfo();
+    }
+
+	function stop() {
+        gamestart = false;
+        send(false);
+        gameInfo();
+	}
+
+    function gameInfo() {
+        if (gamestart == true) {
+            document.getElementById("GameInfo").innerHTML = "Game is in play..";
+
+        }
+        else {
+            document.getElementById("GameInfo").innerHTML = "Game is paused";
+        }
+    }
+
+    //Game load func
+    function load(data) {
+
+        //if game is in play mode, set that true for all instances
+        //else set it to false
+        if (data == "true") {
+            gamestart = true;
+            gamebool = true;
+            sendVals();
+        }
+        else if (data == "false") {
+            gamestart = false;
+            gamebool = false;
+        }
+        //if game mode is true, is true and the data is not a string of data
+        if (gamebool == true && data != "true"){
+            var gamestrtemp = data;//'05,50,20,10,00,11';
+            clickedVals = [];
+            var clickedVals = gamestrtemp.split(",");
+            var loopval = document.getElementById("gameboarddiv").innerHTML;
+            var index = 0;
+            gameboard = '';
+
+            //sort values in array to make sure they are sequential
+            clickedVals.sort();
+
+            //recreate board based on values that have been input
+            for (var rows = 0; rows < gameboardsize; rows++) {
+
+                gameboard += '<tr>';
+                for (var cols = 0; cols < gameboardsize; cols++) {
+                    if (index < clickedVals.length && clickedVals[index] == rows + '' + cols) {
+                        gameboard += '<td bgcolor=' + gbcolorchange + ' onclick="clickedCell(id)"'
+                            + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
+                        index++;
+                    }
+                    else {
+                        gameboard += '<td bgcolor=' + gbcolor + ' onclick="clickedCell(id)"'
+                            + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
+                    }
+                }
+                gameboard += '</tr>'
+                document.getElementById("gameboarddiv").innerHTML = '';
+                document.getElementById("gameboarddiv").innerHTML =
+                    '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
+            }
+
+        }
+        gameInfo();
+    }
+
 
     function connect() {
         socket = new WebSocket("ws://" + window.location.host + "/GOLsocket");
         socket.onopen = function (event) {
             console.log("Socket Connected.");
-        }
+       }
         socket.onclose = function (event) {
             console.log("Socket Disconnected.");
         }
@@ -68,9 +173,9 @@
             console.log(event.data);
             if (event.data === "") {
 
-
+                console.log("wheres the data?");
             }
-
+            load(event.data);
         }
         socket.onerror = function (event) {
             console.log("Error: " + event.data);
@@ -84,7 +189,23 @@
 
     connect();
     window.setTimeout(function () {
-        send("hello");
+        
+        //connect();
+        //send("hello");
     }, 3000);
 
+   
 </script>
+
+<button type="button" onclick="start()">Start</button>
+<button type="button" onclick="stop()">Stop</button>
+<p id = "GameInfo"></p>
+<p id="GameRules">
+    <b>For a space that is 'populated':</b>
+    Each cell with one or no neighbors dies, as if by solitude.<br/>
+    Each cell with four our more neigbors dies, as if 
+    by overpopulation.<br/>
+    Each cell with two or three neighbors survives.<br/>
+    <b>For a space that is 'empty' or 'unpopulated'</b><br/>
+    Each cell with three neighbors becomes populated.
+</p>
