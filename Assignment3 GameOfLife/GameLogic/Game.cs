@@ -108,7 +108,7 @@ namespace Assignment3_GameOfLife.GameLogic
             // Make sure that the coordinates are valid.
         }
 
-        public static string SendString()
+        public async Task SendStringAsync()
         {
             string s = "";
             for (int i = 0; i < 10; i++)
@@ -125,7 +125,7 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
-            await SendMessageToAllAsync(s);
+            await gh.SendMessageToAllAsync(s);
         }
 
         public void ReceiveString(string s)
