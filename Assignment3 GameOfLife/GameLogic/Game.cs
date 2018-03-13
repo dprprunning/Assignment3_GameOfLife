@@ -6,19 +6,25 @@ using System.Threading.Tasks;
 
 namespace Assignment3_GameOfLife.GameLogic
 {
-    public static class Game
+    public class Game
     {
-        public static int currentState;
-        public static bool[,,] f = new bool[1, 10, 10];
+        public int currentState;
+        public bool[,,] f = new bool[1, 10, 10];
         // Array f is the game board.
-        public static int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
-        private static int[,] queue = new int[10000, 2];
-        private static int head = 0, tail = 0;
+        public int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
+        public GameHandler gh;
+        private int[,] queue = new int[10000, 2];
+        private int head = 0, tail = 0;
+
+        public Game(GameHandler g)
+        {
+            gh = g;
+        }
 
         /// <summary>
         /// Initialize.
         /// </summary>
-        public static void OnGet()
+        public void OnGet()
         {
             currentState = 0;
             f[currentState, 3, 4] = true;
@@ -34,7 +40,7 @@ namespace Assignment3_GameOfLife.GameLogic
         /// <param name="x">X</param>
         /// <param name="y">Y</param>
         /// <returns>True when valid, else False.</returns>
-        private static bool CheckBorder(int x, int y)
+        private bool CheckBorder(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 10 || y >= 10)
             {
@@ -46,7 +52,7 @@ namespace Assignment3_GameOfLife.GameLogic
         /// <summary>
         /// Based on the current state, decide whether each cell will survive in next state.
         /// </summary>
-        public static void NextState()
+        public void NextState()
         {
             for(int i = 0; i < 10; i++)
             {
@@ -93,7 +99,7 @@ namespace Assignment3_GameOfLife.GameLogic
         /// </summary>
         /// <param name="x">X</param>
         /// <param name="y">Y</param>
-        public static void ChangeCell(int x, int y)
+        public void ChangeCell(int x, int y)
         {
             if (CheckBorder(x, y))
             {
@@ -102,7 +108,7 @@ namespace Assignment3_GameOfLife.GameLogic
             // Make sure that the coordinates are valid.
         }
 
-        public static string SendString()
+        public string SendString()
         {
             string s = "";
             for (int i = 0; i < 10; i++)
@@ -122,7 +128,7 @@ namespace Assignment3_GameOfLife.GameLogic
             return s;
         }
 
-        public static void ReceiveString(string s)
+        public void ReceiveString(string s)
         {
             string[] ids = s.Split(",");
 
