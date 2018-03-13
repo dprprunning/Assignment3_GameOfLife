@@ -20,11 +20,11 @@ namespace Assignment3_GameOfLife.GameLogic
         {
             gh = g;
             currentState = 0;
-            f[currentState, 3, 4] = true;
-            f[currentState, 4, 5] = true;
-            f[currentState, 5, 3] = true;
-            f[currentState, 5, 4] = true;
-            f[currentState, 5, 5] = true;
+            //f[currentState, 3, 4] = true;
+            //f[currentState, 4, 5] = true;
+            //f[currentState, 5, 3] = true;
+            //f[currentState, 5, 4] = true;
+            //f[currentState, 5, 5] = true;
             Thread th = new Thread(GameMain);
             th.Start();
         }
