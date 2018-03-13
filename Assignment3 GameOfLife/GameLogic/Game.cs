@@ -132,7 +132,10 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
-            await gh.SendMessageToAllAsync(s);
+            if(s != "")
+            {
+                await gh.SendMessageToAllAsync(s);
+            }
         }
 
         public void ReceiveString(string s)
