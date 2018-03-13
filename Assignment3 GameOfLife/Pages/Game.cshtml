@@ -88,14 +88,14 @@
     //Game start and stop func
 	function start() {
         gamestart = true;
-        send(true);
+        //send(true);
         sendVals();
         gameInfo();
     }
 
 	function stop() {
         gamestart = false;
-        send(false);
+        //send(false);
         gameInfo();
 	}
 
@@ -114,17 +114,17 @@
 
         //if game is in play mode, set that true for all instances
         //else set it to false
-        if (data == "true") {
-            gamestart = true;
-            gamebool = true;
-            sendVals();
-        }
-        else if (data == "false") {
-            gamestart = false;
-            gamebool = false;
-        }
+        //if (data == "true") {
+        //    gamestart = true;
+        //    gamebool = true;
+        //    sendVals();
+        //}
+        //else if (data == "false") {
+        //    gamestart = false;
+        //    gamebool = false;
+        //}
         //if game mode is true, is true and the data is not a string of data
-        if (gamebool == true && data != "true"){
+        //if (gamebool == true && data != "true"){
             var gamestrtemp = data;//'05,50,20,10,00,11';
             clickedVals = [];
             var clickedVals = gamestrtemp.split(",");
@@ -156,7 +156,7 @@
                     '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
             }
 
-        }
+        //}
         gameInfo();
     }
 
@@ -184,6 +184,7 @@
     }
 
     function send(message) {
+        console.log(message);
         socket.send(message);
     }
 
