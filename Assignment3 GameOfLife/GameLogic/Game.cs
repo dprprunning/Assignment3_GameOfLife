@@ -25,13 +25,15 @@ namespace Assignment3_GameOfLife.GameLogic
 
         private void GameMain()
         {
+            this.OnGet();
             while (true)
             {
-                Thread.Sleep(1000);
                 Task.Run(async () =>
                 {
-
+                    await SendStringAsync();
+                    NextState();
                 });
+                Thread.Sleep(1000);
             }
         }
 
