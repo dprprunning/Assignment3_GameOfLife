@@ -19,6 +19,20 @@ namespace Assignment3_GameOfLife.GameLogic
         public Game(GameHandler g)
         {
             gh = g;
+            Thread th = new Thread(GameMain);
+            th.Start();
+        }
+
+        private void GameMain()
+        {
+            while (true)
+            {
+                Thread.Sleep(1000);
+                Task.Run(async () =>
+                {
+
+                });
+            }
         }
 
         /// <summary>
@@ -89,7 +103,6 @@ namespace Assignment3_GameOfLife.GameLogic
                 c++;
                 ChangeCell(queue[head, 0], queue[head, 1]);
             }
-            Thread.Sleep(500);
             currentState = 1 - currentState;
             //return f[currentState];
         }

@@ -24,6 +24,5 @@ namespace Assignment3_GameOfLife
 
             game.ReceiveString(message);
         }
-
     }
 }
