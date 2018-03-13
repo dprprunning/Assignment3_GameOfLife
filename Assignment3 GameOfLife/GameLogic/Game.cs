@@ -9,7 +9,7 @@ namespace Assignment3_GameOfLife.GameLogic
     public class Game
     {
         public int currentState;
-        public bool[,,] f = new bool[1, 10, 10];
+        public bool[,,] f = new bool[2, 10, 10];
         // Array f is the game board.
         public int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
         public GameHandler gh;
