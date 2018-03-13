@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Assignment3_GameOfLife.WebSocketManager;
+using Assignment3_GameOfLife.GameLogic;
 
 namespace Assignment3_GameOfLife
 {
