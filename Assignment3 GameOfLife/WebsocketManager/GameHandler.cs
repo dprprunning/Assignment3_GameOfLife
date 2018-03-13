@@ -21,7 +21,7 @@ namespace Assignment3_GameOfLife
 
             var message = System.Text.Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-
+            Game.ReceiveString(message);
 
             //   //this is all test code so feel free to change or delete this
             //   //if message is true or false, send it out to all browsers
