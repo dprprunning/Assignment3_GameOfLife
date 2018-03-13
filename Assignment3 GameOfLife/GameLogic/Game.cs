@@ -19,13 +19,18 @@ namespace Assignment3_GameOfLife.GameLogic
         public Game(GameHandler g)
         {
             gh = g;
+            currentState = 0;
+            f[currentState, 3, 4] = true;
+            f[currentState, 4, 5] = true;
+            f[currentState, 5, 3] = true;
+            f[currentState, 5, 4] = true;
+            f[currentState, 5, 5] = true;
             Thread th = new Thread(GameMain);
             th.Start();
         }
 
         private void GameMain()
         {
-            this.OnGet();
             while (true)
             {
                 Task.Run(async () =>
@@ -35,19 +40,6 @@ namespace Assignment3_GameOfLife.GameLogic
                 });
                 Thread.Sleep(1000);
             }
-        }
-
-        /// <summary>
-        /// Initialize.
-        /// </summary>
-        public void OnGet()
-        {
-            currentState = 0;
-            f[currentState, 3, 4] = true;
-            f[currentState, 4, 5] = true;
-            f[currentState, 5, 3] = true;
-            f[currentState, 5, 4] = true;
-            f[currentState, 5, 5] = true;
         }
 
         /// <summary>
