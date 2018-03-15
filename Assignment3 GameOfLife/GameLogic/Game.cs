@@ -9,12 +9,13 @@ namespace Assignment3_GameOfLife.GameLogic
     public class Game
     {
         public int currentState;
-        public bool[,,] f = new bool[2, 10, 10];
+        public bool[,,] f = new bool[2, 40, 40];
         // Array f is the game board.
         public int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
         public GameHandler gh;
         private int[,] queue = new int[10000, 2];
         private int head = 0, tail = 0;
+        private bool emptyGameboard = false;
 
         public Game(GameHandler g)
         {
@@ -35,10 +36,13 @@ namespace Assignment3_GameOfLife.GameLogic
             {
                 Task.Run(async () =>
                 {
-                    await SendStringAsync();
+                    if(emptyGameboard == false)
+                    {
+                        await SendStringAsync();
+                    }
                     NextState();
                 });
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
         }
 
@@ -146,6 +150,10 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
+            if(s == "")
+            {
+                emptyGameboard = true;
+            }
             await gh.SendMessageToAllAsync(s);
         }
 
@@ -164,6 +172,7 @@ namespace Assignment3_GameOfLife.GameLogic
                     queue[tail, 1] = y;
                     tail = (tail + 1) % 10000;
                     //Add the coordinates to queue.
+                    emptyGameboard = false;
                 }
                 catch (Exception e)
                 {
