@@ -43,7 +43,7 @@
     //document.write('<table id="gametable" border=1 align=center>' + gameboard + '</table>');
     document.getElementById("gameboarddiv").innerHTML =
         '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
-    gameboard = '';
+
     //define a function for a clicked cell event
     //should be able to toggle in-case user wishes to deselect cell
     function clickedCell(id) {
@@ -176,14 +176,15 @@
         socket.send(message);
     }
 
-    connect();
-    gameInfo();
+    document.onload(() => {
+        connect();
+    });
 
 </script>
 
 <button type="button" onclick="start()">Start</button>
 <button type="button" onclick="stop()">Stop</button>
-<p id="GameInfo"></p>
+<p id="GameInfo">Game is in play..</p>
 <p id="GameRules">
     <b>For a space that is 'populated':</b>
     Each cell with one or no neighbors dies, as if by solitude.<br />
