@@ -113,8 +113,6 @@ namespace Assignment3_GameOfLife.GameLogic
                 ChangeCell(queue[head, 0], queue[head, 1]);
                 head = (head + 1) % 10000;
             }
-            currentState = 1 - currentState;
-            //return f[currentState];
         }
 
         /// <summary>
