@@ -38,7 +38,7 @@ namespace Assignment3_GameOfLife.GameLogic
                     await SendStringAsync();
                     NextState();
                 });
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
         }
 
@@ -105,6 +105,7 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
+            currentState = 1 - currentState;
             int c = 0;
             while (head != tail && c < 10000)
             {
@@ -112,7 +113,6 @@ namespace Assignment3_GameOfLife.GameLogic
                 ChangeCell(queue[head, 0], queue[head, 1]);
                 head = (head + 1) % 10000;
             }
-            currentState = 1 - currentState;
             //return f[currentState];
         }
 
@@ -147,10 +147,7 @@ namespace Assignment3_GameOfLife.GameLogic
                     }
                 }
             }
-            if(s != "")
-            {
-                await gh.SendMessageToAllAsync(s);
-            }
+            await gh.SendMessageToAllAsync(s);
         }
 
         public void ReceiveString(string s)
