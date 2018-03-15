@@ -20,8 +20,8 @@
     var socket;
 
     //game colors
-    var gbcolor = "#D5E8E7";
-    var gbcolorchange = "#CED741";
+    var gbcolor = "rgb(213, 232, 231)";
+    var gbcolorchange = "rgb(206, 215, 65)";
 
     //use loop to create table based on size defined earlier
     //gameboard += '<div id="gameboarddiv">'
@@ -55,13 +55,12 @@
         //if cell is changed back, strip the value from the array
         if (tempcolor == gbcolor) {
             document.getElementById(id).style.backgroundColor = gbcolorchange;
-
-            clickedVals.push(id);
-
         }//only allow them to toggle if game is in stop mode
         else {
             document.getElementById(id).style.backgroundColor = gbcolor;
         }
+
+        clickedVals.push(id);
 
         //If game is in play mode, then send those values to
         //server side and clear out array
