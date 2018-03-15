@@ -110,6 +110,7 @@ namespace Assignment3_GameOfLife.GameLogic
             {
                 c++;
                 ChangeCell(queue[head, 0], queue[head, 1]);
+                head = (head + 1) % 10000;
             }
 
             currentState = 1 - currentState;
@@ -164,9 +165,9 @@ namespace Assignment3_GameOfLife.GameLogic
                     int t = Int32.Parse(ss);
                     int y = t % 10;
                     int x = t / 10;
-                    tail = (tail + 1) % 10000;
                     queue[tail, 0] = x;
                     queue[tail, 1] = y;
+                    tail = (tail + 1) % 10000;
                     //Add the coordinates to queue.
                 }
                 catch (Exception e)
