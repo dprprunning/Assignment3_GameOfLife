@@ -31,9 +31,9 @@
         //create table rows and columns and assign id based on position to each cell
         //example - first row will be 00 01 02, and row two will be 10 11 12 etc.
         for (var cols = 0; cols < gameboardsize; cols++) {
-            var id = (rows * 10) + cols;
+            var id = (rows * gameboardsize) + cols;
             gameboard += '<td style="background-color: ' + gbcolor + ';" onclick="clickedCell(id)"'
-                + 'width = 20 height= 20 id= ' + id.toString() + '>' + id.toString() + '</td > ';
+                + 'width = 20 height= 20 id= ' + id.toString() + '></td > ';
 
         }
         gameboard += '</tr>';
@@ -105,7 +105,7 @@
 
         var activeCells = data.split(",");
 
-        for (var i = 0; i < 100; i++) {
+        for (var i = 0; i < gameboardsize * gameboardsize; i++) {
             document.getElementById(i.toString()).style.backgroundColor = gbcolor;
         }
 

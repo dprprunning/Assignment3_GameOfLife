@@ -9,7 +9,8 @@ namespace Assignment3_GameOfLife.GameLogic
     public class Game
     {
         public int currentState;
-        public bool[,,] f = new bool[2, 40, 40];
+        private const int GAMEBOARD = 40;
+        public bool[,,] f = new bool[2, GAMEBOARD, GAMEBOARD];
         // Array f is the game board.
         public int[,] around = new int[8, 2] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
         public GameHandler gh;
@@ -54,7 +55,7 @@ namespace Assignment3_GameOfLife.GameLogic
         /// <returns>True when valid, else False.</returns>
         private bool CheckBorder(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= 10 || y >= 10)
+            if (x < 0 || y < 0 || x >= GAMEBOARD || y >= GAMEBOARD)
             {
                 return false;
             }
@@ -66,9 +67,9 @@ namespace Assignment3_GameOfLife.GameLogic
         /// </summary>
         public void NextState()
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < GAMEBOARD; i++)
             {
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j < GAMEBOARD; j++)
                 {
                     // i and j are coordinates.
                     int count = 0;
@@ -136,9 +137,9 @@ namespace Assignment3_GameOfLife.GameLogic
         public async Task SendStringAsync()
         {
             string s = "";
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < GAMEBOARD; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < GAMEBOARD; j++)
                 {
                     if (f[currentState, i, j])
                     {
@@ -146,7 +147,7 @@ namespace Assignment3_GameOfLife.GameLogic
                         {
                             s += ",";
                         }
-                        s += (i * 10 + j).ToString();
+                        s += (i * GAMEBOARD + j).ToString();
                     }
                 }
             }
@@ -166,8 +167,8 @@ namespace Assignment3_GameOfLife.GameLogic
                 try
                 {
                     int t = Int32.Parse(ss);
-                    int y = t % 10;
-                    int x = t / 10;
+                    int y = t % GAMEBOARD;
+                    int x = t / GAMEBOARD;
                     queue[tail, 0] = x;
                     queue[tail, 1] = y;
                     tail = (tail + 1) % 10000;
