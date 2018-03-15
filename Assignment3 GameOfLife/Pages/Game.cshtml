@@ -30,8 +30,9 @@
         //create table rows and columns and assign id based on position to each cell
         //example - first row will be 00 01 02, and row two will be 10 11 12 etc.
         for (var cols = 0; cols < gameboardsize; cols++) {
+            var id = (rows * 10) + cols;
             gameboard += '<td bgcolor=' + gbcolor + ' onclick="clickedCell(id)"'
-                + 'width = 20 height= 20 id= ' + (rows * 10) + cols + '>' + (rows * 10) + cols + '</td > ';
+                + 'width = 20 height= 20 id= ' + id.toString() + '>' + id.toString() + '</td > ';
 
         }
         gameboard += '</tr>';
@@ -46,9 +47,8 @@
     //should be able to toggle in-case user wishes to deselect cell
     function clickedCell(id) {
 
-        var tempid = id;
         var index = 0;
-        var tempcolor = document.getElementById(tempid).getAttribute("bgcolor");
+        var tempcolor = document.getElementById(id).getAttribute("bgcolor");
         var gametable = document.getElementById("gameboarddiv");
 
         //if color is original color change it, else change it back to original color
@@ -58,14 +58,14 @@
             document.getElementById(id).style.backgroundColor = gbcolorchange;
             document.getElementById(id).setAttribute("bgcolor", gbcolorchange);
 
-			clickedVals.push(tempid); 
+			clickedVals.push(id); 
 
         }//only allow them to toggle if game is in stop mode
         else if (tempcolor == gbcolorchange && gamestart == false) {
             document.getElementById(id).style.backgroundColor = gbcolor;
             document.getElementById(id).setAttribute("bgcolor", gbcolor);
 
-            index = clickedVals.indexOf(tempid);
+            index = clickedVals.indexOf(id);
             clickedVals.splice(index, 1); //take away item from array if toggled
         }
 
@@ -125,36 +125,43 @@
         //}
         //if game mode is true, is true and the data is not a string of data
         //if (gamebool == true && data != "true"){
-            var gamestrtemp = data;//'05,50,20,10,00,11';
+            //var gamestrtemp = data;//'05,50,20,10,00,11';
             clickedVals = [];
-            var clickedVals = gamestrtemp.split(",");
-            var loopval = document.getElementById("gameboarddiv").innerHTML;
-            var index = 0;
-            gameboard = '';
+            var clickedVals = data.split(",");
 
-            //sort values in array to make sure they are sequential
-            clickedVals.sort();
-
-            //recreate board based on values that have been input
-            for (var rows = 0; rows < gameboardsize; rows++) {
-
-                gameboard += '<tr>';
-                for (var cols = 0; cols < gameboardsize; cols++) {
-                    if (index < clickedVals.length && clickedVals[index] == rows + '' + cols) {
-                        gameboard += '<td bgcolor=' + gbcolorchange + ' onclick="clickedCell(id)"'
-                            + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
-                        index++;
-                    }
-                    else {
-                        gameboard += '<td bgcolor=' + gbcolor + ' onclick="clickedCell(id)"'
-                            + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
-                    }
-                }
-                gameboard += '</tr>'
-                document.getElementById("gameboarddiv").innerHTML = '';
-                document.getElementById("gameboarddiv").innerHTML =
-                    '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
+            for (var i = 0; i < clickedVals.length; i++) {
+                var cell = document.getElementById(clickedVals[i]);
+                cell.style.backgroundColor = gbcolorchange;
             }
+
+
+            //var loopval = document.getElementById("gameboarddiv").innerHTML;
+            //var index = 0;
+            ////gameboard = '';
+
+            ////sort values in array to make sure they are sequential
+            //clickedVals.sort();
+
+            ////recreate board based on values that have been input
+            //for (var rows = 0; rows < gameboardsize; rows++) {
+
+            //    gameboard += '<tr>';
+            //    for (var cols = 0; cols < gameboardsize; cols++) {
+            //        if (index < clickedVals.length && clickedVals[index] == rows + '' + cols) {
+            //            gameboard += '<td bgcolor=' + gbcolorchange + ' onclick="clickedCell(id)"'
+            //                + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
+            //            index++;
+            //        }
+            //        else {
+            //            gameboard += '<td bgcolor=' + gbcolor + ' onclick="clickedCell(id)"'
+            //                + 'width = 20 height= 20 id= ' + rows + '' + cols + '>' + rows + '' + cols + '</td > ';
+            //        }
+            //    }
+            //    gameboard += '</tr>'
+            //    document.getElementById("gameboarddiv").innerHTML = '';
+            //    document.getElementById("gameboarddiv").innerHTML =
+            //        '<table id="gametable" border=1 align=center>' + gameboard + '</table>';
+            //}
 
         //}
         gameInfo();
