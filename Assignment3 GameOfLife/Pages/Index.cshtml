@@ -1,108 +1,204 @@
 ﻿@page
-@model IndexModel
+@model GameModel
 @{
-    ViewData["Title"] = "Home page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+<h1 style="text-align:center">Conway's Game of Life</h1>
+@*How to present the game board?*@
+<p></p>
+<div id="gameboarddiv"></div>
+<!-- Javascript code for creating table to be displayed as game board-->
+<script>
+    //gameboard vals for state of the board
+    var gameboard = '';
+    var gameboardsize = 40;
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core Razor Pages</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?linkid=852130">Working with Razor Pages.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure App Service</a></li>
-        </ul>
-    </div>
-</div>
+    var clickedVals = [];
+    var stringVals = '';
+
+    var gamestart = true;
+    var mousedown = false;
+    var socket;
+
+    //game colors
+    var gbcolor = "rgb(213, 232, 231)";
+    var gbcolorchange = "rgb(206, 215, 65)";
+
+    //use loop to create table based on size defined earlier
+    for (var rows = 0; rows < gameboardsize; rows++) {
+
+        gameboard += '<tr>';
+        //create table rows and columns and assign id based on position to each cell
+        //example - first row will be 00 01 02, and row two will be 10 11 12 etc.
+        for (var cols = 0; cols < gameboardsize; cols++) {
+            var id = (rows * gameboardsize) + cols;
+            gameboard += '<td style="background-color: ' + gbcolor + ';" onmousedown="clickedCell(id)" onmouseover="mouseOver(id)"'
+                + 'width = 20 height= 20 id= ' + id.toString() + '></td > ';
+
+        }
+        gameboard += '</tr>';
+    }
+
+    //display gameboard on page
+    document.getElementById("gameboarddiv").innerHTML =
+        '<table id="gametable" border=1 align=center onmouseup="mouseUp()">' + gameboard + '</table>';
+
+    //define a function for a clicked cell event
+    //should be able to toggle in-case user wishes to deselect cell
+    function clickedCell(id) {
+        mousedown = true;
+        gamestart = false;
+
+        //if color is original color change it, else change it back to original color
+        //if cell is changed/ is an active cell, push the value to the array
+        //if cell is changed back, strip the value from the array
+        if (document.getElementById(id).style.backgroundColor == gbcolor) {
+            document.getElementById(id).style.backgroundColor = gbcolorchange;
+        }//only allow them to toggle if game is in stop mode
+        else {
+            document.getElementById(id).style.backgroundColor = gbcolor;
+        }
+
+        clickedVals.push(id);
+
+        if (gamestart && !mousedown) {
+            sendVals();
+        }
+    }
+
+    function mouseUp() {
+        mousedown = false;
+        gamestart = true;
+        sendVals();
+    }
+
+    function mouseOver(id) {
+        if (mousedown) {
+            clickedCell(id);
+
+        }
+    }
+
+    //send most recent values to backend
+    function sendVals() {
+        if (clickedVals.length > 0) {
+            stringVals = clickedVals.toString();
+            send(stringVals);
+            clickedVals = [];
+        }
+    }
+
+    //Game start and stop func
+    function start() {
+        gamestart = true;
+        sendVals();
+        gameInfo();
+    }
+
+    function stop() {
+        gamestart = false;
+        gameInfo();
+    }
+
+    function gameInfo() {
+        if (gamestart == true) {
+            document.getElementById("GameInfo").innerHTML = "Game is in play..";
+
+        }
+        else {
+            document.getElementById("GameInfo").innerHTML = "Game is paused";
+        }
+    }
+
+    //Game load func
+    function load(data) {
+
+        var activeCells = data.split(",");
+        if (activeCells.length != 0) {
+            for (var i = 0; i < gameboardsize * gameboardsize; i++) {
+                if (!activeCells.includes(i.toString())) {
+                    document.getElementById(i.toString()).style.backgroundColor = gbcolor;
+                }
+                else {
+                    document.getElementById(i.toString()).style.backgroundColor = gbcolorchange;
+                }
+            }
+        }
+    }
+
+    function connect() {
+        socket = new WebSocket("ws://" + window.location.host + "/GOLsocket");
+        socket.onopen = function (event) {
+            console.log("Socket Connected.");
+        }
+        socket.onclose = function (event) {
+            var reason;
+
+            if (event.code == 1000)
+                reason = "Normal closure, meaning that the purpose for which the connection was established has been fulfilled.";
+            else if (event.code == 1001)
+                reason = "An endpoint is \"going away\", such as a server going down or a browser having navigated away from a page.";
+            else if (event.code == 1002)
+                reason = "An endpoint is terminating the connection due to a protocol error";
+            else if (event.code == 1003)
+                reason = "An endpoint is terminating the connection because it has received a type of data it cannot accept (e.g., an endpoint that understands only text data MAY send this if it receives a binary message).";
+            else if (event.code == 1004)
+                reason = "Reserved. The specific meaning might be defined in the future.";
+            else if (event.code == 1005)
+                reason = "No status code was actually present.";
+            else if (event.code == 1006)
+                reason = "The connection was closed abnormally, e.g., without sending or receiving a Close control frame";
+            else if (event.code == 1007)
+                reason = "An endpoint is terminating the connection because it has received data within a message that was not consistent with the type of the message (e.g., non-UTF-8 [http://tools.ietf.org/html/rfc3629] data within a text message).";
+            else if (event.code == 1008)
+                reason = "An endpoint is terminating the connection because it has received a message that \"violates its policy\". This reason is given either if there is no other sutible reason, or if there is a need to hide specific details about the policy.";
+            else if (event.code == 1009)
+                reason = "An endpoint is terminating the connection because it has received a message that is too big for it to process.";
+            else if (event.code == 1010) // Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
+                reason = "An endpoint (client) is terminating the connection because it has expected the server to negotiate one or more extension, but the server didn't return them in the response message of the WebSocket handshake. <br /> Specifically, the extensions that are needed are: " + event.reason;
+            else if (event.code == 1011)
+                reason = "A server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.";
+            else if (event.code == 1015)
+                reason = "The connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).";
+            else
+                reason = "Unknown reason";
+
+            console.log(reason);
+        }
+        socket.onmessage = function (event) {
+            console.log(event.data);
+            if (gamestart == true) {
+                if (event.data === "") {
+
+                    console.log("Where's the data?");
+                }
+                load(event.data);
+            }
+        }
+        socket.onerror = function (event) {
+            console.log("Error: ", event);
+
+        }
+    }
+
+    function send(message) {
+        console.log(message);
+        socket.send(message);
+    }
+
+    connect();
+
+</script>
+
+<button type="button" onclick="start()">Start</button>
+<button type="button" onclick="stop()">Stop</button>
+<p id="GameInfo">Game is in play..</p>
+<p id="GameRules">
+    <b>For a space that is 'populated':</b>
+    Each cell with one or no neighbors dies, as if by solitude.<br />
+    Each cell with four our more neigbors dies, as if
+    by overpopulation.<br />
+    Each cell with two or three neighbors survives.<br />
+    <b>For a space that is 'empty' or 'unpopulated'</b><br />
+    Each cell with three neighbors becomes populated.
+</p>
