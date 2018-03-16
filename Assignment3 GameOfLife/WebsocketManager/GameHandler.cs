@@ -21,7 +21,6 @@ namespace Assignment3_GameOfLife
         public override async Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
             var message = System.Text.Encoding.UTF8.GetString(buffer, 0, result.Count);
-            await SendMessageToAllAsync(message);
             game.ReceiveString(message);
         }
     }

@@ -55,7 +55,7 @@
         //if cell is changed back, strip the value from the array
         if (document.getElementById(id).style.backgroundColor == gbcolor) {
             document.getElementById(id).style.backgroundColor = gbcolorchange;
-        }//only allow them to toggle if game is in stop mode
+        }
         else {
             document.getElementById(id).style.backgroundColor = gbcolor;
         }
@@ -71,23 +71,13 @@
         mousedown = false;
         if (!gamepause) {
             gamestart = true;
+            sendVals();
         }
-        sendVals();
     }
 
     function mouseOver(id) {
         if (mousedown) {
             clickedCell(id);
-
-        }
-    }
-
-    //send most recent values to backend
-    function sendVals() {
-        if (clickedVals.length > 0) {
-            stringVals = clickedVals.toString();
-            send(stringVals);
-            clickedVals = [];
         }
     }
 
@@ -115,9 +105,17 @@
         }
     }
 
+    //send most recent values to backend
+    function sendVals() {
+        if (clickedVals.length > 0) {
+            stringVals = clickedVals.toString();
+            send(stringVals);
+            clickedVals = [];
+        }
+    }
+
     //Game load func
     function load(data) {
-
         var activeCells = data.split(",");
         if (activeCells.length != 0) {
             for (var i = 0; i < gameboardsize * gameboardsize; i++) {
@@ -174,8 +172,7 @@
             console.log(event.data);
             if (gamestart == true) {
                 if (event.data === "") {
-
-                    console.log("Where's the data?");
+                    console.log("Empty Board");
                 }
                 load(event.data);
             }
@@ -191,7 +188,13 @@
         socket.send(message);
     }
 
+    window.onbeforeunload = function () {
+        socket.onclose = function () { }; // disable onclose handler first
+        socket.close()
+    };
+
     connect();
+
 
 </script>
 

@@ -160,13 +160,12 @@ namespace Assignment3_GameOfLife.GameLogic
 
         public void ReceiveString(string s)
         {
-            string[] ids = s.Split(",");
+            emptyGameboard = false;
+            string[] ids = s.Split(",").Distinct().ToArray();
 
-            foreach(string ss in ids)
+            foreach (string ss in ids)
             {
-                try
-                {
-                    int t = Int32.Parse(ss);
+                if (Int32.TryParse(ss, out int t)) {
                     int y = t % GAMEBOARD;
                     int x = t / GAMEBOARD;
                     queue[tail, 0] = x;
@@ -174,10 +173,6 @@ namespace Assignment3_GameOfLife.GameLogic
                     tail = (tail + 1) % 10000;
                     //Add the coordinates to queue.
                     emptyGameboard = false;
-                }
-                catch (Exception e)
-                {
-                    //Ignore bad numbers.
                 }
             }
         }
