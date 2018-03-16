@@ -22,28 +22,29 @@ namespace Assignment3_GameOfLife.GameLogic
         {
             gh = g;
             currentState = 0;
-            f[currentState, 3, 4] = true;
-            f[currentState, 4, 5] = true;
-            f[currentState, 5, 3] = true;
-            f[currentState, 5, 4] = true;
-            f[currentState, 5, 5] = true;
+            //f[currentState, 3, 4] = true;
+            //f[currentState, 4, 5] = true;
+            //f[currentState, 5, 3] = true;
+            //f[currentState, 5, 4] = true;
+            //f[currentState, 5, 5] = true;
             Thread th = new Thread(GameMain);
             th.Start();
         }
 
         private void GameMain()
         {
+            ReceiveString("481,482,522,521,529,569,570,490,491,531,577,617,657,578,619,503,463,504,424,425,465,435,475,476,436,905,906,907,945,986,716,756,796,717,758");
             while (true)
             {
                 Task.Run(async () =>
                 {
-                    if(emptyGameboard == false)
+                    NextState();
+                    if (emptyGameboard == false)
                     {
                         await SendStringAsync();
                     }
-                    NextState();
                 });
-                Thread.Sleep(500);
+                Thread.Sleep(50);
             }
         }
 
@@ -160,8 +161,7 @@ namespace Assignment3_GameOfLife.GameLogic
 
         public void ReceiveString(string s)
         {
-            emptyGameboard = false;
-            string[] ids = s.Split(",").Distinct().ToArray();
+            string[] ids = s.Split(",");
 
             foreach (string ss in ids)
             {
