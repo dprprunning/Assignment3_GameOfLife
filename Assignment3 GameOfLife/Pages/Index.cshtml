@@ -17,6 +17,7 @@
     var stringVals = '';
 
     var gamestart = true;
+    var gamepause = false;
     var mousedown = false;
     var socket;
 
@@ -68,7 +69,9 @@
 
     function mouseUp() {
         mousedown = false;
-        gamestart = true;
+        if (!gamepause) {
+            gamestart = true;
+        }
         sendVals();
     }
 
@@ -91,12 +94,14 @@
     //Game start and stop func
     function start() {
         gamestart = true;
+        gamepause = false;
         sendVals();
         gameInfo();
     }
 
     function stop() {
         gamestart = false;
+        gamepause = true;
         gameInfo();
     }
 
